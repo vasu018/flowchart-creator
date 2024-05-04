@@ -1,5 +1,4 @@
 import './App.css';
-import Board from './Board.jsx';
 import Toolbar from './Toolbar.jsx';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';

@@ -1,5 +1,5 @@
 import { useDrag } from "react-dnd";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { toolswitch } from "./Redux/reducers/toolSlice";
 
 const style = {

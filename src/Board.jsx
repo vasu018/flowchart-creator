@@ -10,7 +10,6 @@ import ReactFlow, {
 import { useSelector } from 'react-redux';
 import 'reactflow/dist/style.css';
 import { useDrop } from 'react-dnd';
-import { useMemo } from 'react';
 import CustomNode from './CustomNode';
 
 const nodeTypes = { custom: CustomNode };
@@ -48,8 +47,8 @@ const Board = ({ allowedDropEffect }) => {
             setStatus("Start creating flowchart")
         }
     }, [nodes]);
-
-    const [{ canDrop, isOver }, drop] = useDrop(
+    // eslint-disable-next-line
+    const [obj, drop] = useDrop(
         () => ({
             accept: 'tool',
             drop: (monitor, dropPos) => {
@@ -82,7 +81,7 @@ const Board = ({ allowedDropEffect }) => {
         }),
         [allowedDropEffect, currentTool, id],
     );
-    const isActive = canDrop && isOver;
+
 
     const onNodesChange = useCallback(
         (changes) => setNodes((nds) => applyNodeChanges(changes, nds)),
