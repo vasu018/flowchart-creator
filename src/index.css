@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind variants;
+
+body,
+html,
+#root {
+  height: 100%
+}
+
+.customHeight {
+  height: calc(100% - 75px);
+}
+
+@media only screen and (max-width: 600px) {
+  .customHeight {
+    height: calc(100% - 93px);
+  }
+}
