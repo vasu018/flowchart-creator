@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import ReactFlow, {
     Controls,
     Background,
@@ -19,6 +19,7 @@ const Board = ({ allowedDropEffect }) => {
     const [nodes, setNodes] = useState([]);
     const [edges, setEdges] = useState([]);
     const [status, setStatus] = useState('');
+    const boardRef = useRef(null);
 
     const currentTool = useSelector((state) => state.tool.toolProperty);
 
@@ -37,7 +38,8 @@ const Board = ({ allowedDropEffect }) => {
             .then((json) => {
                 console.log(json);
                 setStatus("Task published successfully...")
-            });
+            })
+            .catch((error) => { setStatus("Error occured while publishing! Please try again") })
     }
 
     useEffect(() => {
@@ -54,10 +56,12 @@ const Board = ({ allowedDropEffect }) => {
             drop: (monitor, dropPos) => {
                 console.log(dropPos)
                 setId((prev) => (Number(prev) + 1).toString());
+                const { x, y } = dropPos.getClientOffset();
+                const { x: a, y: b } = boardRef.current.getBoundingClientRect();
                 setNodes([...nodes, {
                     id: id,
                     data: { label: currentTool.name },
-                    position: dropPos.getClientOffset(),
+                    position: { x: x - a, y: y - b },
                     style: {
                         backgroundColor: currentTool.color,
                         color: "#fff",
@@ -108,8 +112,7 @@ const Board = ({ allowedDropEffect }) => {
         <>
             <div className='border-2 border-[#4f71be] h-[100%]' ref={drop} style={{ position: "relative" }}>
                 <div className="flex justify-center bg-[#4f71be] text-[#fff] border-b-2 border-black mb-[5px]">Workflow Automation</div>
-                <div className="customHeight"
-                // style={{ height: "calc(100% - 75px)" }}
+                <div className="customHeight" ref={boardRef}
                 >
                     <ReactFlow
                         style={{ backgroundColor: 'white', }}
@@ -119,7 +122,6 @@ const Board = ({ allowedDropEffect }) => {
                         onEdgesChange={onEdgesChange}
                         onConnect={onConnect}
                         nodeTypes={nodeTypes}
-                    // nodeOrigin={[0, 0]}
                     >
                         <Background />
                         <Controls />
